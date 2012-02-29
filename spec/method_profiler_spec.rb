@@ -31,4 +31,10 @@ describe MethodProfiler do
       petition.foo
     end
   end
+
+  describe "#report" do
+    it "should return a string of report data" do
+      profiler.report.should be_an_instance_of(String)
+    end
+  end
 end

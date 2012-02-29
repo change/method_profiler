@@ -1,3 +1,5 @@
+require 'benchmark'
+
 class MethodProfiler
   attr_reader :observed_methods, :data
 
@@ -8,11 +10,21 @@ class MethodProfiler
     wrap_methods_with_profiling
   end
 
-  def profile(method)
-    start = Time.now
-    yield
-    stop = Time.now
-    @data[method.to_sym] << { start: start, stop: stop }
+  def profile(method, &block)
+    benchmark = Benchmark.measure { block.call }
+    elapsed_time = benchmark.to_s.match(/\(\s*([^\)]+)\)/)[1].to_f
+    @data[method.to_sym] << elapsed_time
+  end
+
+  def report
+    out = []
+    out << header
+    final_data = calculate_final_data
+    final_data.each do |method|
+      out << "#{method[0]} #{method[1]} #{method[2]}"
+    end
+    out << divider
+    out.join("\n")
   end
 
   private
@@ -40,5 +52,26 @@ class MethodProfiler
         alias_method method, "#{method}_with_profiling"
       end
     end
+  end
+
+  def calculate_final_data
+    @final_data ||= begin
+      final_data = []
+      data.each do |method, records|
+        total_calls = records.size
+        average = records.reduce(:+) / total_calls
+        final_data << [method, average, total_calls]
+      end
+      final_data.sort! { |a, b| b[1] <=> a[1] }
+      final_data
+    end
+  end
+
+  def header
+    ["=========== MethodProfiler data ===========", divider].join("\n")
+  end
+
+  def divider
+    "==========================================="
   end
 end
