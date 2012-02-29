@@ -3,6 +3,8 @@ require 'spec_helper'
 profiler = MethodProfiler.new(Petition)
 
 describe MethodProfiler do
+  let(:petition ) { Petition.new }
+
   it "can be instantiated with an object to observe" do
     profiler.should be_true
   end
@@ -12,7 +14,6 @@ describe MethodProfiler do
   end
 
   it "creates wrapper methods for each method in the object" do
-    petition = Petition.new
     petition.should respond_to(:foo)
     petition.should respond_to(:foo_with_profiling)
     petition.should respond_to(:foo_without_profiling)
@@ -21,9 +22,13 @@ describe MethodProfiler do
 
   describe "#profile" do
     it "adds a new record for the method call" do
-      petition = Petition.new
       petition.foo
       profiler.data[:foo].size.should == 1
+    end
+
+    it "calls the real method" do
+      petition.should_receive(:foo_without_profiling)
+      petition.foo
     end
   end
 end
