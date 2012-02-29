@@ -1,10 +1,18 @@
 class MethodProfiler
-  attr_reader :observed_methods
+  attr_reader :observed_methods, :data
 
   def initialize(obj)
     @obj = obj
     @observed_methods = find_obj_methods
+    @data = Hash.new { |h, k| h[k] = [] }
     wrap_methods_with_profiling
+  end
+
+  def profile(method)
+    start = Time.now
+    yield
+    stop = Time.now
+    @data[method.to_sym] << { start: start, stop: stop }
   end
 
   private

@@ -4,7 +4,7 @@ profiler = MethodProfiler.new(Petition)
 
 describe MethodProfiler do
   it "can be instantiated with an object to observe" do
-    profiler.should be
+    profiler.should be_true
   end
 
   it "finds all the object's instance methods" do
@@ -17,5 +17,13 @@ describe MethodProfiler do
     petition.should respond_to(:foo_with_profiling)
     petition.should respond_to(:foo_without_profiling)
     petition.should_not respond_to(:foo_with_profiling_with_profiling)
+  end
+
+  describe "#profile" do
+    it "adds a new record for the method call" do
+      petition = Petition.new
+      petition.foo
+      profiler.data[:foo].size.should == 1
+    end
   end
 end
