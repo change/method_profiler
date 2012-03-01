@@ -31,6 +31,10 @@ describe MethodProfiler do
       @petition.should_receive(:foo_without_profiling)
       @petition.foo
     end
+
+    it "returns the value of the real method" do
+      @petition.baz.should == "blah"
+    end
   end
 
   describe "#report" do

@@ -12,9 +12,11 @@ class MethodProfiler
   end
 
   def profile(method, &block)
-    benchmark = Benchmark.measure { block.call }
+    result = nil
+    benchmark = Benchmark.measure { result = block.call }
     elapsed_time = benchmark.to_s.match(/\(\s*([^\)]+)\)/)[1].to_f
     @data[method.to_sym] << elapsed_time
+    result
   end
 
   def report

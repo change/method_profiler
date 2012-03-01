@@ -4,5 +4,5 @@ require "method_profiler"
 class Petition
   def foo; end
   def bar; end
-  def baz; end
+  def baz; "blah"; end
 end
