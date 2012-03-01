@@ -6,7 +6,7 @@ class MethodProfiler
   def initialize(obj)
     @obj = obj
     @observed_methods = find_obj_methods
-    @data = Hash.new { |h, k| h[k] = [] }
+    initialize_data
     wrap_methods_with_profiling
   end
 
@@ -20,14 +20,21 @@ class MethodProfiler
     out = []
     out << header
     final_data = calculate_final_data
-    final_data.each do |method|
-      out << "#{method[0]} #{method[1]} #{method[2]}"
-    end
+    final_data.each { |method| out << "#{method[0]} #{method[1]} #{method[2]}" }
     out << divider
     out.join("\n")
   end
 
+  def reset!
+    initialize_data
+    @final_data = nil
+  end
+
   private
+
+  def initialize_data
+    @data = Hash.new { |h, k| h[k] = [] }
+  end
 
   def find_obj_methods
     methods = @obj.instance_methods
