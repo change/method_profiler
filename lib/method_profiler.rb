@@ -20,11 +20,15 @@ class MethodProfiler
   end
 
   def report
-    Hirb::Helpers::Table.render(
-      final_data,
-      headers: ["Method", "Average Time", "Total Calls"],
-      description: false
-    )
+    [
+      "MethodProfiler results for:",
+      @obj.to_s,
+      Hirb::Helpers::Table.render(
+        final_data,
+        headers: ["Method", "Average Time", "Total Calls"],
+        description: false
+      )
+    ].join("\n")
   end
 
   def reset!

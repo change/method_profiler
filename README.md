@@ -7,6 +7,8 @@ profiler = MethodProfiler.new(MyClass)
 MyClass.new.foo
 puts profiler.report
 
+# MethodProfiler results for:
+# MyClass
 # +--------+--------------+-------------+
 # | Method | Average Time | Total Calls |
 # +--------+--------------+-------------+
