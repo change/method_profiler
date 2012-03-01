@@ -69,7 +69,7 @@ class MethodProfiler
       data.each do |method, records|
         total_calls = records.size
         average = records.reduce(:+) / total_calls
-        final_data << [method, average, total_calls]
+        final_data << [method, '%f ms' % (average * 1000), total_calls]
       end
       final_data.sort! { |a, b| b[1] <=> a[1] }
       final_data
