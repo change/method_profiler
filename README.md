@@ -4,14 +4,14 @@
 
 ```ruby
 profiler = MethodProfiler.new(MyClass)
-MyClass.new.my_method
+MyClass.new.foo
 puts profiler.report
 
-# =========== MethodProfiler data ===========
-# Method          Average Time    Total Calls
-# ===========================================
-# my_method       239 ms          1
-# foo              84 ms          4
-# bar              14 ms          3
-# ===========================================
+# +--------+--------------+-------------+
+# | Method | Average Time | Total Calls |
+# +--------+--------------+-------------+
+# | foo    | 91.037000 ms | 1           |
+# | bar    | 15.016000 ms | 2           |
+# | baz    | 23.005000 ms | 1           |
+# +--------+--------------+-------------+
 ```
