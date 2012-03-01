@@ -42,13 +42,15 @@ describe MethodProfiler do
       @petition.foo
       @petition.bar
       @petition.baz
-      profiler.report.lines.reject { |line| line =~ /^=/ }.count.should == 3
+      profiler.report.scan(/foo/).size.should == 1
+      profiler.report.scan(/bar/).size.should == 1
+      profiler.report.scan(/baz/).size.should == 1
     end
 
     it "combines multiple calls to the same method into one line" do
       @petition.foo
       @petition.foo
-      profiler.report.lines.reject { |line| line =~ /^=/ }.count.should == 1
+      profiler.report.scan(/foo/).size.should == 1
     end
   end
 end

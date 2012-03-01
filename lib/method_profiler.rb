@@ -1,4 +1,5 @@
 require 'benchmark'
+require 'hirb'
 
 class MethodProfiler
   attr_reader :observed_methods, :data
@@ -17,12 +18,7 @@ class MethodProfiler
   end
 
   def report
-    out = []
-    out << header
-    final_data = calculate_final_data
-    final_data.each { |method| out << "#{method[0]} #{method[1]} #{method[2]}" }
-    out << divider
-    out.join("\n")
+    Hirb::Helpers::Table.render(final_data, headers: ["Method", "Average Time", "Total Calls"])
   end
 
   def reset!
@@ -61,7 +57,7 @@ class MethodProfiler
     end
   end
 
-  def calculate_final_data
+  def final_data
     @final_data ||= begin
       final_data = []
       data.each do |method, records|
@@ -72,13 +68,5 @@ class MethodProfiler
       final_data.sort! { |a, b| b[1] <=> a[1] }
       final_data
     end
-  end
-
-  def header
-    ["=========== MethodProfiler data ===========", divider].join("\n")
-  end
-
-  def divider
-    "==========================================="
   end
 end
