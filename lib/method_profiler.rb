@@ -6,8 +6,8 @@ class MethodProfiler
 
   def initialize(obj)
     @obj = obj
-    @observed_methods = find_obj_methods
     initialize_data
+    find_obj_methods
     wrap_methods_with_profiling
   end
 
@@ -37,12 +37,14 @@ class MethodProfiler
   end
 
   def find_obj_methods
-    methods = @obj.instance_methods
-    @obj.ancestors.each do |a|
-      next if a == @obj
-      methods -= a.instance_methods
+    @observed_methods ||= begin
+      methods = @obj.instance_methods
+      @obj.ancestors.each do |a|
+        next if a == @obj
+        methods -= a.instance_methods
+      end
+      methods
     end
-    methods
   end
 
   def wrap_methods_with_profiling
