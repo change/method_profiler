@@ -21,11 +21,17 @@ class MethodProfiler
 
   def report
     [
-      "MethodProfiler results for:",
-      @obj.to_s,
+      "MethodProfiler results for: #{@obj}",
       Hirb::Helpers::Table.render(
         final_data,
-        headers: ["Method", "Average Time", "Total Calls"],
+        headers: {
+          method: "Method",
+          min: "Min Time",
+          max: "Max Time",
+          average: "Average Time",
+          total_calls: "Total Calls"
+        },
+        fields: [:method, :min, :max, :average, :total_calls],
         description: false
       )
     ].join("\n")
@@ -75,10 +81,23 @@ class MethodProfiler
       data.each do |method, records|
         total_calls = records.size
         average = records.reduce(:+) / total_calls
-        final_data << [method, '%f ms' % (average * 1000), total_calls]
+        final_data << {
+          method: method,
+          min: records.min,
+          max: records.max,
+          average: average,
+          total_calls: total_calls
+        }
       end
-      final_data.sort! { |a, b| b[1] <=> a[1] }
+      final_data.sort! { |a, b| b[:average] <=> a[:average] }
+      final_data.each do |record|
+        [:min, :max, :average].each { |k| record[k] = to_ms(record[k]) }
+      end
       final_data
     end
+  end
+
+  def to_ms(seconds)
+    "%.3f ms" % (seconds * 1000)
   end
 end
