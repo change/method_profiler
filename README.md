@@ -8,7 +8,7 @@ The resulting chart includes each method, the minimum time it took to run, the m
 
 ```ruby
 profiler = MethodProfiler.new(MyClass)
-MyClass.new.foo
+MyClass.new.accusamus_est
 puts profiler.report
 
 # MethodProfiler results for: MyClass
