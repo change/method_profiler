@@ -2,20 +2,22 @@ require 'benchmark'
 require 'hirb'
 
 class MethodProfiler
-  attr_reader :observed_methods, :data
+  attr_reader :observed_singleton_methods, :observed_instance_methods, :data
 
   def initialize(obj)
     @obj = obj
+    @observed_singleton_methods = find_object_methods(obj.singleton_class, true)
+    @observed_instance_methods = find_object_methods(obj)
     initialize_data
-    find_obj_methods
     wrap_methods_with_profiling
   end
 
-  def profile(method, &block)
+  def profile(method, singleton = false, &block)
+    method_name = singleton ? ".#{method}" : "##{method}"
     result = nil
     benchmark = Benchmark.measure { result = block.call }
     elapsed_time = benchmark.to_s.match(/\(\s*([^\)]+)\)/)[1].to_f
-    @data[method.to_sym] << elapsed_time
+    @data[method_name] << elapsed_time
     result
   end
 
@@ -48,23 +50,38 @@ class MethodProfiler
     @data = Hash.new { |h, k| h[k] = [] }
   end
 
-  def find_obj_methods
-    @observed_methods ||= begin
-      methods = @obj.instance_methods
-      @obj.ancestors.each do |a|
-        next if a == @obj
-        methods -= a.instance_methods
+  def find_object_methods(obj, singleton = false)
+    obj.instance_methods - obj.ancestors.map do |a|
+      if a == obj
+        []
+      else
+        if singleton
+          a.singleton_class.instance_methods
+        else
+          a.instance_methods
+        end
       end
-      methods
-    end
+    end.flatten
   end
 
   def wrap_methods_with_profiling
     profiler = self
-    observed = observed_methods
+    osm = observed_singleton_methods
+    oim = observed_instance_methods
+
+    @obj.singleton_class.module_eval do
+      osm.each do |method|
+        define_method("#{method}_with_profiling") do |*args|
+          profiler.profile(method, true) { send("#{method}_without_profiling", *args) }
+        end
+
+        alias_method "#{method}_without_profiling", method
+        alias_method method, "#{method}_with_profiling"
+      end
+    end
 
     @obj.module_eval do
-      observed.each do |method|
+      oim.each do |method|
         define_method("#{method}_with_profiling") do |*args|
           profiler.profile(method) { send("#{method}_without_profiling", *args) }
         end
@@ -78,6 +95,7 @@ class MethodProfiler
   def final_data
     @final_data ||= begin
       final_data = []
+
       data.each do |method, records|
         total_calls = records.size
         average = records.reduce(:+) / total_calls
@@ -89,10 +107,13 @@ class MethodProfiler
           total_calls: total_calls
         }
       end
+
       final_data.sort! { |a, b| b[:average] <=> a[:average] }
+
       final_data.each do |record|
         [:min, :max, :average].each { |k| record[k] = to_ms(record[k]) }
       end
+
       final_data
     end
   end
