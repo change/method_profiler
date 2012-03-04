@@ -3,6 +3,13 @@ require 'spec_helper'
 describe MethodProfiler::Report do
   before do
     profiler = MethodProfiler::Profiler.new(Petition)
+
+    # Fake the timings for testing purposes
+    profiler.stub(:benchmark) do |result, block|
+      result = block.call
+      "(#{rand})"
+    end
+
     petition = Petition.new
 
     [:hay, :hay, :guys].each { |m| petition.class.send(m) }
