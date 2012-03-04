@@ -26,11 +26,19 @@ module MethodProfiler
       @order = direction
     end
 
+    def to_a
+      if @order == :ascending
+        @data.sort { |a, b| a[@sort_by] <=> b[@sort_by] }
+      else
+        @data.sort { |a, b| b[@sort_by] <=> a[@sort_by] }
+      end
+    end
+
     def to_s
       [
         "MethodProfiler results for: #{@obj}",
         Hirb::Helpers::Table.render(
-          sorted_data,
+          to_a,
           headers: {
             method: "Method",
             min: "Min Time",
@@ -47,16 +55,6 @@ module MethodProfiler
           description: false
         )
       ].join("\n")
-    end
-
-    private
-
-    def sorted_data
-      if @order == :ascending
-        @data.sort { |a, b| a[@sort_by] <=> b[@sort_by] }
-      else
-        @data.sort { |a, b| b[@sort_by] <=> a[@sort_by] }
-      end
     end
   end
 end
