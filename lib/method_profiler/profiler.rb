@@ -3,7 +3,15 @@ require 'method_profiler/report'
 require 'benchmark'
 
 module MethodProfiler
+  # Observes an object, keeping track of all its method calls and the wall clock
+  # time spent executing them.
+  #
   class Profiler
+    # Initializes a new {Profiler}. Wraps all methods in the object and its singleton
+    # class with profiling code.
+    #
+    # @param [Object] obj The object to observe.
+    #
     def initialize(obj)
       @obj = obj
       @data = Hash.new { |h, k| h[k] = [] }
@@ -11,6 +19,11 @@ module MethodProfiler
       wrap_methods_with_profiling
     end
 
+    # Generates a report object with all the data collected so far bay the profiler. This report
+    # can be displayed in various ways. See {Report}.
+    #
+    # @return [Report] A new report with all the data the profiler has collected.
+    #
     def report
       Report.new(final_data)
     end
