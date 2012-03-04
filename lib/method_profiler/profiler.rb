@@ -4,15 +4,57 @@ require 'benchmark'
 
 module MethodProfiler
   class Profiler
-    attr_reader :observed_singleton_methods, :observed_instance_methods, :data
-
     def initialize(obj)
       @obj = obj
-      @observed_singleton_methods = find_object_methods(obj.singleton_class, true)
-      @observed_instance_methods = find_object_methods(obj)
+      @data = Hash.new { |h, k| h[k] = [] }
 
-      reset!
       wrap_methods_with_profiling
+    end
+
+    def report
+      Report.new(final_data)
+    end
+
+    private
+
+    def wrap_methods_with_profiling
+      profiler = self
+      singleton_methods_to_wrap = find_singleton_methods
+      instance_methods_to_wrap = find_instance_methods
+
+      @obj.singleton_class.module_eval do
+        singleton_methods_to_wrap.each do |method|
+          define_method("#{method}_with_profiling") do |*args|
+            profiler.send(:profile, method, true) { send("#{method}_without_profiling", *args) }
+          end
+
+          alias_method "#{method}_without_profiling", method
+          alias_method method, "#{method}_with_profiling"
+        end
+      end
+
+      @obj.module_eval do
+        instance_methods_to_wrap.each do |method|
+          define_method("#{method}_with_profiling") do |*args|
+            profiler.send(:profile, method) { send("#{method}_without_profiling", *args) }
+          end
+
+          alias_method "#{method}_without_profiling", method
+          alias_method method, "#{method}_with_profiling"
+        end
+      end
+    end
+
+    def find_singleton_methods
+      @obj.singleton_class.instance_methods - @obj.singleton_class.ancestors.map do |a|
+        a == @obj ? [] : a.instance_methods
+      end.flatten
+    end
+
+    def find_instance_methods
+      @obj.instance_methods - @obj.ancestors.map do |a|
+        a == @obj ? [] : a.instance_methods
+      end.flatten
     end
 
     def profile(method, singleton = false, &block)
@@ -24,62 +66,10 @@ module MethodProfiler
       result
     end
 
-    def report
-      Report.new(final_data)
-    end
-
-    def reset!
-      @data = Hash.new { |h, k| h[k] = [] }
-    end
-
-    private
-
-    def find_object_methods(obj, singleton = false)
-      obj.instance_methods - obj.ancestors.map do |a|
-        if a == obj
-          []
-        else
-          if singleton
-            a.singleton_class.instance_methods
-          else
-            a.instance_methods
-          end
-        end
-      end.flatten
-    end
-
-    def wrap_methods_with_profiling
-      profiler = self
-      osm = observed_singleton_methods
-      oim = observed_instance_methods
-
-      @obj.singleton_class.module_eval do
-        osm.each do |method|
-          define_method("#{method}_with_profiling") do |*args|
-            profiler.profile(method, true) { send("#{method}_without_profiling", *args) }
-          end
-
-          alias_method "#{method}_without_profiling", method
-          alias_method method, "#{method}_with_profiling"
-        end
-      end
-
-      @obj.module_eval do
-        oim.each do |method|
-          define_method("#{method}_with_profiling") do |*args|
-            profiler.profile(method) { send("#{method}_without_profiling", *args) }
-          end
-
-          alias_method "#{method}_without_profiling", method
-          alias_method method, "#{method}_with_profiling"
-        end
-      end
-    end
-
-    def final_data(options)
+    def final_data
       results = []
 
-      data.each do |method, records|
+      @data.each do |method, records|
         total_calls = records.size
         average = records.reduce(:+) / total_calls
         results << {
@@ -93,6 +83,5 @@ module MethodProfiler
 
       results
     end
-
   end
 end
