@@ -21,11 +21,12 @@ class MethodProfiler
     result
   end
 
-  def report
+  def report(options = {})
+    normalize_options!(options)
     [
       "MethodProfiler results for: #{@obj}",
       Hirb::Helpers::Table.render(
-        final_data,
+        final_data(options),
         headers: {
           method: "Method",
           min: "Min Time",
@@ -92,30 +93,47 @@ class MethodProfiler
     end
   end
 
-  def final_data
-    @final_data ||= begin
-      final_data = []
+  def normalize_options!(options)
+    options[:sort_by] ||= :average
 
-      data.each do |method, records|
-        total_calls = records.size
-        average = records.reduce(:+) / total_calls
-        final_data << {
-          method: method,
-          min: records.min,
-          max: records.max,
-          average: average,
-          total_calls: total_calls
-        }
-      end
-
-      final_data.sort! { |a, b| b[:average] <=> a[:average] }
-
-      final_data.each do |record|
-        [:min, :max, :average].each { |k| record[k] = to_ms(record[k]) }
-      end
-
-      final_data
+    options[:order] ||= if options[:sort_by] == :method
+      :ascending
+    else
+      :descending
     end
+
+    options[:order] = :ascending if options[:order] == :asc
+    options[:order] = :descending if options[:order] == :desc
+
+    options
+  end
+
+  def final_data(options)
+    final_data = []
+
+    data.each do |method, records|
+      total_calls = records.size
+      average = records.reduce(:+) / total_calls
+      final_data << {
+        method: method,
+        min: records.min,
+        max: records.max,
+        average: average,
+        total_calls: total_calls
+      }
+    end
+
+    if options[:order] == :ascending
+      final_data.sort! { |a, b| a[options[:sort_by]] <=> b[options[:sort_by]] }
+    else
+      final_data.sort! { |a, b| b[options[:sort_by]] <=> a[options[:sort_by]] }
+    end
+
+    final_data.each do |record|
+      [:min, :max, :average].each { |k| record[k] = to_ms(record[k]) }
+    end
+
+    final_data
   end
 
   def to_ms(seconds)
