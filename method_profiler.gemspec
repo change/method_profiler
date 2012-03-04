@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = "method_profiler"
-  s.version     = "0.1.0"
+  s.version     = "1.0.0"
   s.authors     = ["Jimmy Cuadra"]
   s.email       = ["jimmy@jimmycuadra.com"]
   s.homepage    = "https://github.com/change/method_profiler"
