@@ -12,18 +12,20 @@ module MethodProfiler
       @order = :descending
     end
 
-    def sort_by(field = nil)
+    def sort_by(field)
+      field = field.to_sym
       field = :average unless FIELDS.include?(field)
-
       @sort_by = field
+      self
     end
 
-    def order(direction = nil)
+    def order(direction)
+      direction = direction.to_sym
       direction = :descending unless DIRECTIONS.include?(direction)
       direction = :descending if direction == :desc
       direction = :ascending if direction == :asc
-
       @order = direction
+      self
     end
 
     def to_a
