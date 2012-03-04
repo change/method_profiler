@@ -39,7 +39,7 @@ module MethodProfiler
             total_calls: "Total Calls"
           },
           fields: [:method, :min, :max, :average, :total_calls],
-          filter_classes: {
+          filters: {
             min: :to_milliseconds,
             max: :to_milliseconds,
             average: :to_milliseconds
