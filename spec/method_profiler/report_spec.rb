@@ -1,34 +1,25 @@
 require 'spec_helper'
 
 describe MethodProfiler::Report do
-  let!(:profiler) { MethodProfiler::Profiler.new(Petition) }
-  let(:petition) { Petition.new }
+  before do
+    profiler = MethodProfiler::Profiler.new(Petition)
+    petition = Petition.new
 
-  it "outputs one line for each method that was called" do
-    petition.class.hay
-    petition.class.guys
-    petition.foo
-    petition.bar
-    petition.baz
+    [:hay, :hay, :guys].each { |m| petition.class.send(m) }
+    [:foo, :bar, :baz].each { |m| petition.send(m) }
 
-    report = profiler.report.to_s
-
-    report.scan(/.hay/).size.should == 1
-    report.scan(/.guys/).size.should == 1
-    report.scan(/#foo/).size.should == 1
-    report.scan(/#bar/).size.should == 1
-    report.scan(/#baz/).size.should == 1
+    @report = profiler.report
   end
 
-  it "combines multiple calls to the same method into one line" do
-    petition.class.hay
-    petition.class.hay
-    petition.foo
-    petition.foo
+  describe "#to_s" do
+    it "outputs one line for each method that was called" do
+      output = @report.to_s
 
-    report = profiler.report.to_s
-
-    report.scan(/.hay/).size.should == 1
-    report.scan(/#foo/).size.should == 1
+      output.scan(/\.hay/).size.should == 1
+      output.scan(/\.guys/).size.should == 1
+      output.scan(/#foo/).size.should == 1
+      output.scan(/#bar/).size.should == 1
+      output.scan(/#baz/).size.should == 1
+    end
   end
 end

@@ -1,7 +1,25 @@
 class Petition
-  def self.hay; end
-  def self.guys; "sup"; end
-  def foo; end
-  def bar; end
-  def baz; "blah"; end
+  def self.hay
+    sleep rand
+    nil
+  end
+  def self.guys
+    sleep rand
+    "sup"
+  end
+
+  def foo
+    sleep rand
+    nil
+  end
+
+  def bar
+    sleep rand
+    nil
+  end
+
+  def baz
+    sleep rand
+    "blah"
+  end
 end
