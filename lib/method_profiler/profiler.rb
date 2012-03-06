@@ -1,7 +1,7 @@
 require 'method_profiler/report'
+require 'method_profiler/core_ext/object'
 
 require 'benchmark'
-require 'method_profiler/core_ext/object'
 
 module MethodProfiler
   # Observes an object, keeping track of all its method calls and the wall clock
