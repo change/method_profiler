@@ -68,20 +68,20 @@ module MethodProfiler
         "MethodProfiler results for: #{@obj}",
         Hirb::Helpers::Table.render(
           to_a,
-          headers: {
-            method: "Method",
-            min: "Min Time",
-            max: "Max Time",
-            average: "Average Time",
-            total_calls: "Total Calls"
+          :headers => {
+            :method => "Method",
+            :min => "Min Time",
+            :max => "Max Time",
+            :average => "Average Time",
+            :total_calls => "Total Calls"
           },
-          fields: [:method, :min, :max, :average, :total_calls],
-          filters: {
-            min: :to_milliseconds,
-            max: :to_milliseconds,
-            average: :to_milliseconds
+          :fields => [:method, :min, :max, :average, :total_calls],
+          :filters => {
+            :min => :to_milliseconds,
+            :max => :to_milliseconds,
+            :average => :to_milliseconds
           },
-          description: false
+          :description => false
         )
       ].join("\n")
     end

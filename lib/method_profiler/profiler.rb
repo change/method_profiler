@@ -1,6 +1,7 @@
 require 'method_profiler/report'
 
 require 'benchmark'
+require 'method_profiler/core_ext/object'
 
 module MethodProfiler
   # Observes an object, keeping track of all its method calls and the wall clock
@@ -73,7 +74,8 @@ module MethodProfiler
     def profile(method, singleton = false, &block)
       method_name = singleton ? ".#{method}" : "##{method}"
       result = nil
-      elapsed_time = benchmark(result, &block).to_s.match(/\(\s*([^\)]+)\)/)[1].to_f
+      elapsed_time, result = benchmark(result, &block)
+      elapsed_time = elapsed_time.to_s.match(/\(\s*([^\)]+)\)/)[1].to_f
       @data[method_name] << elapsed_time
       result
     end
@@ -85,11 +87,11 @@ module MethodProfiler
         total_calls = records.size
         average = records.reduce(:+) / total_calls
         results << {
-          method: method,
-          min: records.min,
-          max: records.max,
-          average: average,
-          total_calls: total_calls
+          :method => method,
+          :min => records.min,
+          :max => records.max,
+          :average => average,
+          :total_calls => total_calls
         }
       end
 
@@ -99,7 +101,8 @@ module MethodProfiler
     private
 
     def benchmark(result, &block)
-      Benchmark.measure { result = block.call }
+      elapsed_time = Benchmark.measure { result = block.call }
+      return elapsed_time, result
     end
   end
 end
