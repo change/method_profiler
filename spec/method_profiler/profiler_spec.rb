@@ -11,6 +11,14 @@ describe MethodProfiler::Profiler do
     petition.should_not respond_to(:foo_with_profiling_with_profiling)
   end
 
+  it "class methods should properly return values" do
+    Petition.guys.should == "sup"
+  end
+
+  it "instance method should properly return values" do
+    petition.baz.should == "blah"
+  end
+
   describe "#report" do
     it "returns a new Report object" do
       profiler.report.should be_an_instance_of MethodProfiler::Report
