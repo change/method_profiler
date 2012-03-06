@@ -6,7 +6,7 @@ module MethodProfiler
   #
   class Report
     # Fields that can be passed to {#sort_by}.
-    FIELDS = [:method, :min, :max, :average, :total_calls]
+    FIELDS = [:method, :min, :max, :average, :total_calls, :total_time]
 
     # Directions that can be passed to {#order}.
     DIRECTIONS = [:asc, :ascending, :desc, :descending]
@@ -73,13 +73,15 @@ module MethodProfiler
             :min => "Min Time",
             :max => "Max Time",
             :average => "Average Time",
-            :total_calls => "Total Calls"
+            :total_calls => "Total Calls",
+            :total_time => "Total Time"
           },
-          :fields => [:method, :min, :max, :average, :total_calls],
+          :fields => [:method, :min, :max, :average, :total_calls, :total_time],
           :filters => {
             :min => :to_milliseconds,
             :max => :to_milliseconds,
-            :average => :to_milliseconds
+            :average => :to_milliseconds,
+            :total_time => :to_milliseconds
           },
           :description => false
         )
