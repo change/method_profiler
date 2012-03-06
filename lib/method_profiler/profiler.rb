@@ -85,11 +85,11 @@ module MethodProfiler
         total_calls = records.size
         average = records.reduce(:+) / total_calls
         results << {
-          method: method,
-          min: records.min,
-          max: records.max,
-          average: average,
-          total_calls: total_calls
+          :method => method,
+          :min => records.min,
+          :max => records.max,
+          :average => average,
+          :total_calls => total_calls
         }
       end
 
