@@ -85,13 +85,15 @@ module MethodProfiler
 
       @data.each do |method, records|
         total_calls = records.size
-        average = records.reduce(:+) / total_calls
+        total_time = records.reduce(:+)
+        average = total_time / total_calls
         results << {
           :method => method,
           :min => records.min,
           :max => records.max,
           :average => average,
-          :total_calls => total_calls
+          :total_calls => total_calls,
+          :total_time => total_time
         }
       end
 
