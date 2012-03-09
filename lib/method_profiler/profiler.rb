@@ -38,8 +38,8 @@ module MethodProfiler
 
       @obj.singleton_class.module_eval do
         singleton_methods_to_wrap.each do |method|
-          define_method("#{method}_with_profiling") do |*args|
-            profiler.send(:profile, method, true) { send("#{method}_without_profiling", *args) }
+          define_method("#{method}_with_profiling") do |*args, &block|
+            profiler.send(:profile, method, true) { send("#{method}_without_profiling", *args, &block) }
           end
 
           alias_method "#{method}_without_profiling", method
@@ -49,8 +49,8 @@ module MethodProfiler
 
       @obj.module_eval do
         instance_methods_to_wrap.each do |method|
-          define_method("#{method}_with_profiling") do |*args|
-            profiler.send(:profile, method) { send("#{method}_without_profiling", *args) }
+          define_method("#{method}_with_profiling") do |*args, &block|
+            profiler.send(:profile, method) { send("#{method}_without_profiling", *args, &block) }
           end
 
           alias_method "#{method}_without_profiling", method

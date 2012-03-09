@@ -19,6 +19,22 @@ describe MethodProfiler::Profiler do
     petition.baz.should == "blah"
   end
 
+  it "method_with_implicit_block" do
+    petition.method_with_implicit_block {|v| v }.should == "implicit"
+  end
+
+  it "method_with_explicit_block" do
+    petition.method_with_explicit_block {|v| v }.should == "explicit"
+  end
+
+  it "method_with_implicit_block_and_args" do
+    petition.method_with_implicit_block_and_args(1,2,3) {|v| v }.should == [1,2,3]
+  end
+
+  it "method_with_explicit_block_and_args" do
+    petition.method_with_explicit_block_and_args(1,2,3) {|v| v }.should == [1,2,3]
+  end
+
   describe "#report" do
     it "returns a new Report object" do
       profiler.report.should be_an_instance_of MethodProfiler::Report
