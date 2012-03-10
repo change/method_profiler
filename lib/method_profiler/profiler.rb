@@ -92,8 +92,8 @@ module MethodProfiler
           :min => records.min,
           :max => records.max,
           :average => average,
+          :total_time => total_time,
           :total_calls => total_calls,
-          :total_time => total_time
         }
       end
 
