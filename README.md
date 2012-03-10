@@ -1,4 +1,4 @@
-[![endorse](http://api.coderwall.com/jimmycuadra/endorsecount.png)](http://coderwall.com/jimmycuadra)
+[![Build Status](https://secure.travis-ci.org/change/method_profiler.png)](http://travis-ci.org/change/method_profiler) [![endorse](http://api.coderwall.com/jimmycuadra/endorsecount.png)](http://coderwall.com/jimmycuadra)
 
 # MethodProfiler
 
