@@ -11,8 +11,8 @@ Create a new profiler by passing the object you want to profile to `MethodProfil
 ```ruby
 profiler = MethodProfiler.observe(MyClass)
 
-MyClass.nisi_inventore
-MyClass.nisi_inventore
+MyClass.labore_voluptatum
+MyClass.labore_voluptatum
 
 my_obj = MyClass.new
 
