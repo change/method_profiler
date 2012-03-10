@@ -11,12 +11,28 @@ describe MethodProfiler::Profiler do
     petition.should_not respond_to(:foo_with_profiling_with_profiling)
   end
 
-  it "class methods should properly return values" do
+  it "returns correct values for class methods" do
     Petition.guys.should == "sup"
   end
 
-  it "instance method should properly return values" do
+  it "returns correct values for instance methods" do
     petition.baz.should == "blah"
+  end
+
+  it "yields to implicit blocks" do
+    petition.method_with_implicit_block {|v| v }.should == "implicit"
+  end
+
+  it "calls explicit blocks" do
+    petition.method_with_explicit_block {|v| v }.should == "explicit"
+  end
+
+  it "yields to implicit blocks with arguments" do
+    petition.method_with_implicit_block_and_args(1,2,3) {|v| v }.should == [1,2,3]
+  end
+
+  it "calls explicit blocks with arguments" do
+    petition.method_with_explicit_block_and_args(1,2,3) {|v| v }.should == [1,2,3]
   end
 
   describe "#report" do
