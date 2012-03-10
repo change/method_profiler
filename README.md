@@ -27,31 +27,33 @@ The resulting chart includes each method, the minimum time it took to run, the m
 
 ```
 MethodProfiler results for: MyClass
-+------------------------+-----------+------------+--------------+-------------+
-| Method                 | Min Time  | Max Time   | Average Time | Total Calls |
-+------------------------+-----------+------------+--------------+-------------+
-| #accusamus_est         | 32.086 ms | 324.140 ms | 160.252 ms   | 3           |
-| #autem_iste!           | 29.607 ms | 318.592 ms | 156.221 ms   | 3           |
-| #distinctio_eos        | 29.477 ms | 318.471 ms | 156.097 ms   | 3           |
-| #laborum_fugit         | 18.388 ms | 291.900 ms | 140.580 ms   | 3           |
-| #suscipit_architecto   | 12.036 ms | 272.279 ms | 130.247 ms   | 3           |
-| #et_fugit              | 2.794 ms  | 11.658 ms  | 6.185 ms     | 3           |
-| #porro_rerum           | 0.097 ms  | 12.096 ms  | 1.031 ms     | 43          |
-| #provident_molestiae   | 0.005 ms  | 3.997 ms   | 0.871 ms     | 6           |
-| .nisi_inventore        | 0.368 ms  | 1.329 ms   | 0.849 ms     | 2           |
-| #quis_temporibus       | 0.104 ms  | 6.696 ms   | 0.713 ms     | 24          |
-| #labore_voluptatum     | 0.004 ms  | 8.834 ms   | 0.447 ms     | 86          |
-| #quia_est              | 0.004 ms  | 3.667 ms   | 0.327 ms     | 24          |
-| #ut_reiciendis         | 0.004 ms  | 2.842 ms   | 0.250 ms     | 24          |
-| #sint_quasi            | 0.066 ms  | 1.836 ms   | 0.166 ms     | 24          |
-| #sed_at                | 0.067 ms  | 0.119 ms   | 0.078 ms     | 24          |
-| #repellendus_suscipit  | 0.054 ms  | 0.128 ms   | 0.067 ms     | 24          |
-| #quas_nesciunt         | 0.024 ms  | 0.026 ms   | 0.025 ms     | 3           |
-| #iure_quis             | 0.006 ms  | 0.232 ms   | 0.014 ms     | 48          |
-| #dicta_ipsam           | 0.005 ms  | 0.068 ms   | 0.013 ms     | 24          |
-| #perspiciatis_aut      | 0.006 ms  | 0.006 ms   | 0.006 ms     | 3           |
-| #aperiam_laborum       | 0.004 ms  | 0.009 ms   | 0.005 ms     | 34          |
-+------------------------+-----------+------------+--------------+-------------+
++-----------------------+-----------+------------+--------------+------------+-------------+
+| Method                | Min Time  | Max Time   | Average Time | Total Time | Total Calls |
++-----------------------+-----------+------------+--------------+------------+-------------+
+| #accusamus_est        | 28.722 ms | 393.649 ms | 150.543 ms   | 451.628 ms | 3           |
+| #autem_iste!          | 26.220 ms | 387.026 ms | 146.644 ms   | 439.933 ms | 3           |
+| #distinctio_eos       | 26.095 ms | 386.903 ms | 146.520 ms   | 439.559 ms | 3           |
+| #laborum_fugit        | 14.887 ms | 351.369 ms | 127.564 ms   | 382.692 ms | 3           |
+| #suscipit_architecto  | 9.876 ms  | 269.339 ms | 96.440 ms    | 289.319 ms | 3           |
+| #et_fugit             | 0.005 ms  | 63.101 ms  | 10.704 ms    | 64.225 ms  | 6           |
+| #porro_rerum          | 2.970 ms  | 15.137 ms  | 7.126 ms     | 21.378 ms  | 3           |
+| #provident_molestiae  | 0.097 ms  | 17.860 ms  | 1.134 ms     | 27.225 ms  | 24          |
+| #nisi_inventore       | 0.098 ms  | 15.076 ms  | 1.044 ms     | 54.272 ms  | 52          |
+| #quis_temporibus      | 0.004 ms  | 11.908 ms  | 0.643 ms     | 15.430 ms  | 24          |
+| .labore_voluptatum    | 0.440 ms  | 0.470 ms   | 0.455 ms     | 0.910 ms   | 2           |
+| #quia_est             | 0.004 ms  | 11.133 ms  | 0.453 ms     | 47.092 ms  | 104         |
+| #ut_reiciendis        | 0.004 ms  | 5.626 ms   | 0.346 ms     | 8.302 ms   | 24          |
+| #sint_quasi           | 0.062 ms  | 2.152 ms   | 0.188 ms     | 4.504 ms   | 24          |
+| #sed_at               | 0.065 ms  | 0.150 ms   | 0.085 ms     | 2.034 ms   | 24          |
+| #repellendus_suscipit | 0.051 ms  | 0.122 ms   | 0.070 ms     | 1.684 ms   | 24          |
+| .quas_nesciunt        | 0.058 ms  | 0.124 ms   | 0.062 ms     | 4.303 ms   | 69          |
+| #iure_quis            | 0.021 ms  | 0.025 ms   | 0.023 ms     | 0.069 ms   | 3           |
+| #dicta_ipsam          | 0.006 ms  | 0.266 ms   | 0.017 ms     | 0.798 ms   | 48          |
+| #perspiciatis_aut     | 0.004 ms  | 0.068 ms   | 0.013 ms     | 0.314 ms   | 24          |
+| .aperiam_laborum      | 0.005 ms  | 0.015 ms   | 0.006 ms     | 0.438 ms   | 69          |
+| #voluptas_ratione     | 0.005 ms  | 0.007 ms   | 0.006 ms     | 0.018 ms   | 3           |
+| #ex_voluptas          | 0.004 ms  | 0.010 ms   | 0.005 ms     | 0.212 ms   | 41          |
++-----------------------+-----------+------------+--------------+------------+-------------+
 ```
 
 ## Reporting
