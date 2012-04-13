@@ -1,5 +1,4 @@
 require 'method_profiler/report'
-require 'method_profiler/core_ext/object'
 
 require 'benchmark'
 
@@ -36,7 +35,7 @@ module MethodProfiler
       singleton_methods_to_wrap = find_singleton_methods
       instance_methods_to_wrap = find_instance_methods
 
-      @obj.singleton_class.module_eval do
+      singleton_class.module_eval do
         singleton_methods_to_wrap.each do |method|
           define_method("#{method}_with_profiling") do |*args, &block|
             profiler.send(:profile, method, true) { send("#{method}_without_profiling", *args, &block) }
@@ -59,22 +58,27 @@ module MethodProfiler
       end
     end
 
+    def singleton_class
+      if @obj.respond_to?(:singleton_class)
+        @obj.singleton_class
+      else
+        klass = nil
+        @obj.module_eval { klass = class << self; self; end }
+        klass
+      end
+    end
+
     def find_singleton_methods
-      @obj.singleton_class.instance_methods - @obj.singleton_class.ancestors.map do |a|
-        a == @obj ? [] : a.instance_methods
-      end.flatten
+      @obj.methods(false)
     end
 
     def find_instance_methods
-      @obj.instance_methods - @obj.ancestors.map do |a|
-        a == @obj ? [] : a.instance_methods
-      end.flatten
+      @obj.instance_methods(false)
     end
 
     def profile(method, singleton = false, &block)
       method_name = singleton ? ".#{method}" : "##{method}"
-      result = nil
-      elapsed_time, result = benchmark(result, &block)
+      elapsed_time, result = benchmark(block)
       elapsed_time = elapsed_time.to_s.match(/\(\s*([^\)]+)\)/)[1].to_f
       @data[method_name] << elapsed_time
       result
@@ -102,8 +106,9 @@ module MethodProfiler
 
     private
 
-    def benchmark(result, &block)
-      elapsed_time = Benchmark.measure { result = block.call }
+    def benchmark(block_to_benchmark)
+      result = nil
+      elapsed_time = Benchmark.measure { result = block_to_benchmark.call }
       return elapsed_time, result
     end
   end
