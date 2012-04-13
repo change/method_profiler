@@ -1,5 +1,4 @@
 require 'method_profiler/report'
-require 'method_profiler/core_ext/object'
 
 require 'benchmark'
 
