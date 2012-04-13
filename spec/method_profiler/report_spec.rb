@@ -12,7 +12,7 @@ describe MethodProfiler::Report do
 
     petition = Petition.new
 
-    [:hay, :hay, :guys].each { |m| petition.class.send(m) }
+    [:hay, :guys].each { |m| petition.class.send(m) }
     [:foo, :bar, :baz].each { |m| petition.send(m) }
 
     @report = profiler.report
