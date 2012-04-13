@@ -5,8 +5,18 @@ module MethodProfiler
   # Sorts and displays data collected by a {Profiler}.
   #
   class Report
+    # Report headers
+    HEADERS = {
+      :method => "Method",
+      :min => "Min Time",
+      :max => "Max Time",
+      :average => "Average Time",
+      :total_time => "Total Time",
+      :total_calls => "Total Calls",
+    }
+
     # Fields that can be passed to {#sort_by}.
-    FIELDS = [:method, :min, :max, :average, :total_time, :total_calls]
+    FIELDS = HEADERS.keys
 
     # Directions that can be passed to {#order}.
     DIRECTIONS = [:asc, :ascending, :desc, :descending]
@@ -68,15 +78,8 @@ module MethodProfiler
         "MethodProfiler results for: #{@obj}",
         Hirb::Helpers::Table.render(
           to_a,
-          :headers => {
-            :method => "Method",
-            :min => "Min Time",
-            :max => "Max Time",
-            :average => "Average Time",
-            :total_time => "Total Time",
-            :total_calls => "Total Calls",
-          },
-          :fields => [:method, :min, :max, :average, :total_time, :total_calls],
+          :headers => HEADERS.dup,
+          :fields => FIELDS.dup,
           :filters => {
             :min => :to_milliseconds,
             :max => :to_milliseconds,
