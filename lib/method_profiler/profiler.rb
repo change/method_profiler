@@ -73,8 +73,7 @@ module MethodProfiler
 
     def profile(method, singleton = false, &block)
       method_name = singleton ? ".#{method}" : "##{method}"
-      result = nil
-      elapsed_time, result = benchmark(result, &block)
+      elapsed_time, result = benchmark(block)
       elapsed_time = elapsed_time.to_s.match(/\(\s*([^\)]+)\)/)[1].to_f
       @data[method_name] << elapsed_time
       result
@@ -102,8 +101,9 @@ module MethodProfiler
 
     private
 
-    def benchmark(result, &block)
-      elapsed_time = Benchmark.measure { result = block.call }
+    def benchmark(block_to_benchmark)
+      result = nil
+      elapsed_time = Benchmark.measure { result = block_to_benchmark.call }
       return elapsed_time, result
     end
   end

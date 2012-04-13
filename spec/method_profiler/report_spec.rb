@@ -5,8 +5,8 @@ describe MethodProfiler::Report do
     profiler = MethodProfiler::Profiler.new(Petition)
 
     # Fake the timings for testing purposes
-    profiler.stub(:benchmark) do |result, block|
-      result = block.call
+    profiler.stub(:benchmark) do |block_to_benchmark|
+      result = block_to_benchmark.call
       "(#{rand})"
     end
 
