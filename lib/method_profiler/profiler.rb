@@ -33,8 +33,8 @@ module MethodProfiler
 
     def wrap_methods_with_profiling
       profiler = self
-      singleton_methods_to_wrap = find_singleton_methods
-      instance_methods_to_wrap = find_instance_methods
+      singleton_methods_to_wrap = @obj.methods(false)
+      instance_methods_to_wrap = @obj.instance_methods(false)
 
       @obj.singleton_class.module_eval do
         singleton_methods_to_wrap.each do |method|
@@ -57,18 +57,6 @@ module MethodProfiler
           alias_method method, "#{method}_with_profiling"
         end
       end
-    end
-
-    def find_singleton_methods
-      @obj.singleton_class.instance_methods - @obj.singleton_class.ancestors.map do |a|
-        a == @obj ? [] : a.instance_methods
-      end.flatten
-    end
-
-    def find_instance_methods
-      @obj.instance_methods - @obj.ancestors.map do |a|
-        a == @obj ? [] : a.instance_methods
-      end.flatten
     end
 
     def profile(method, singleton = false, &block)
