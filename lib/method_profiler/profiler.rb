@@ -33,8 +33,9 @@ module MethodProfiler
 
     def wrap_methods_with_profiling
       profiler = self
-      singleton_methods_to_wrap = @obj.singleton_methods
-      instance_methods_to_wrap = @obj.instance_methods(false)
+      singleton_methods_to_wrap = @obj.singleton_methods + @obj.private_methods(false)
+      instance_methods_to_wrap = @obj.instance_methods(false) + @obj.private_instance_methods(false)
+      # private_methods_to_wrap = @obj.private_methods(false)
 
       @obj.singleton_class.module_eval do
         singleton_methods_to_wrap.each do |method|
