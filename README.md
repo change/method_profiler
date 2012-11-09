@@ -66,7 +66,7 @@ MethodProfiler results for: MyClass
 puts profiler.report.sort_by(:total_calls).order(:ascending)
 ```
 
-`#sort_by` accepts a symbol or string with the name of any of the columns in the table: `:method`, `:min`, `:max`, `:average`, or `:total_calls`.
+`#sort_by` accepts a symbol or string with the name of any of the columns in the table: `:method`, `:min`, `:max`, `:average`, `:total_time`, or `:total_calls`.
 
 `#order` accepts a symbol or string of `:ascending` or `:descending`. These can also be abbreviated with `:asc` and `:desc`.
 
