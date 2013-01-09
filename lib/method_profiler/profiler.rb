@@ -1,5 +1,4 @@
 require 'method_profiler/report'
-require 'method_profiler/core_ext/object'
 
 require 'benchmark'
 
@@ -89,12 +88,12 @@ module MethodProfiler
         total_time = records.reduce(:+)
         average = total_time / total_calls
         results << {
-          :method => method,
-          :min => records.min,
-          :max => records.max,
-          :average => average,
-          :total_time => total_time,
-          :total_calls => total_calls,
+          method: method,
+          min: records.min,
+          max: records.max,
+          average: average,
+          total_time: total_time,
+          total_calls: total_calls,
         }
       end
 

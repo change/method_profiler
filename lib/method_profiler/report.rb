@@ -7,12 +7,12 @@ module MethodProfiler
   class Report
     # Report headers
     HEADERS = {
-      :method => "Method",
-      :min => "Min Time",
-      :max => "Max Time",
-      :average => "Average Time",
-      :total_time => "Total Time",
-      :total_calls => "Total Calls",
+      method: "Method",
+      min: "Min Time",
+      max: "Max Time",
+      average: "Average Time",
+      total_time: "Total Time",
+      total_calls: "Total Calls",
     }
 
     # Fields that can be passed to {#sort_by}.
@@ -78,15 +78,15 @@ module MethodProfiler
         "MethodProfiler results for: #{@obj}",
         Hirb::Helpers::Table.render(
           to_a,
-          :headers => HEADERS.dup,
-          :fields => FIELDS.dup,
-          :filters => {
-            :min => :to_milliseconds,
-            :max => :to_milliseconds,
-            :average => :to_milliseconds,
-            :total_time => :to_milliseconds,
+          headers: HEADERS.dup,
+          fields: FIELDS.dup,
+          filters: {
+            min: :to_milliseconds,
+            max: :to_milliseconds,
+            average: :to_milliseconds,
+            total_time: :to_milliseconds,
           },
-          :description => false
+          description: false
         )
       ].join("\n")
     end
