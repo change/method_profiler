@@ -35,7 +35,7 @@ module MethodProfiler
       profiler = self
       singleton_methods_to_wrap = @obj.methods(false)
       instance_methods_to_wrap = @obj.instance_methods(false)
-      private_instance_methods_to_wrap = @obj.private_instance_methods(false) 
+      private_instance_methods_to_wrap = @obj.private_instance_methods(false)
 
       @obj.singleton_class.module_eval do
         singleton_methods_to_wrap.each do |method|
@@ -67,10 +67,8 @@ module MethodProfiler
 
           alias_method "#{method}_without_profiling", method
           alias_method method, "#{method}_with_profiling"
-          
-          private "#{method}_with_profiling"
-          private "#{method}_without_profiling"
 
+          private "#{method}_with_profiling"
         end
       end
     end
@@ -102,8 +100,6 @@ module MethodProfiler
 
       results
     end
-
-    private
 
     def benchmark(block_to_benchmark)
       result = nil

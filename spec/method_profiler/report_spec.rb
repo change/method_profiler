@@ -13,8 +13,7 @@ describe MethodProfiler::Report do
     petition = Petition.new
 
     [:hay, :guys].each { |m| petition.class.send(m) }
-    [:foo, :bar, :baz].each { |m| petition.send(m) }
-    [:shh].each { |m| petition.send(m) }
+    [:foo, :bar, :baz, :shh].each { |m| petition.send(m) }
 
     @report = profiler.report
   end
@@ -81,6 +80,7 @@ describe MethodProfiler::Report do
       output.scan(/#foo/).size.should == 1
       output.scan(/#bar/).size.should == 1
       output.scan(/#baz/).size.should == 1
+      output.scan(/#shh/).size.should == 1
     end
   end
 end

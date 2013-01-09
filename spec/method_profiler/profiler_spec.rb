@@ -9,6 +9,8 @@ describe MethodProfiler::Profiler do
     petition.should respond_to(:foo_with_profiling)
     petition.should respond_to(:foo_without_profiling)
     petition.should_not respond_to(:foo_with_profiling_with_profiling)
+    petition.private_methods.should include(:shh_with_profiling)
+    petition.private_methods.should include(:shh_without_profiling)
   end
 
   it "returns correct values for class methods" do
@@ -17,11 +19,6 @@ describe MethodProfiler::Profiler do
 
   it "returns correct values for instance methods" do
     petition.baz.should == "blah"
-  end
-  
-  it "creates private profiling methods" do
-    petition.private_methods.should include (:shh_with_profiling)
-    petition.private_methods.should include (:shh_without_profiling)
   end
 
   it "returns correct values for private methods" do
