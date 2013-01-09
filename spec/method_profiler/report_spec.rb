@@ -14,6 +14,7 @@ describe MethodProfiler::Report do
 
     [:hay, :guys].each { |m| petition.class.send(m) }
     [:foo, :bar, :baz].each { |m| petition.send(m) }
+    [:shh].each { |m| petition.send(m) }
 
     @report = profiler.report
   end
@@ -22,7 +23,7 @@ describe MethodProfiler::Report do
     it "returns an array of records" do
       results = @report.to_a
       results.should be_an Array
-      results.size.should == 5
+      results.size.should == 6
     end
 
     it "returns results sorted by average time (descending) by default" do
