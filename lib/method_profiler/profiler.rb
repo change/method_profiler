@@ -35,6 +35,7 @@ module MethodProfiler
       profiler = self
       singleton_methods_to_wrap = @obj.methods(false)
       instance_methods_to_wrap = @obj.instance_methods(false)
+      private_instance_methods_to_wrap = @obj.private_instance_methods(false) 
 
       @obj.singleton_class.module_eval do
         singleton_methods_to_wrap.each do |method|
@@ -55,6 +56,21 @@ module MethodProfiler
 
           alias_method "#{method}_without_profiling", method
           alias_method method, "#{method}_with_profiling"
+        end
+      end
+
+      @obj.module_eval do
+        private_instance_methods_to_wrap.each do |method|
+          define_method("#{method}_with_profiling") do |*args, &block|
+            profiler.send(:profile, method) { send("#{method}_without_profiling", *args, &block) }
+          end
+
+          alias_method "#{method}_without_profiling", method
+          alias_method method, "#{method}_with_profiling"
+          
+          private "#{method}_with_profiling"
+          private "#{method}_without_profiling"
+
         end
       end
     end

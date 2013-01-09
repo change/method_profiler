@@ -31,4 +31,10 @@ class Petition
   def method_with_explicit_block_and_args(*args, &block)
     block.call args
   end
+  
+  private
+
+  def shh
+    "secret"
+  end
 end

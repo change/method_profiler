@@ -18,6 +18,15 @@ describe MethodProfiler::Profiler do
   it "returns correct values for instance methods" do
     petition.baz.should == "blah"
   end
+  
+  it "creates private profiling methods" do
+    petition.private_methods.should include (:shh_with_profiling)
+    petition.private_methods.should include (:shh_without_profiling)
+  end
+
+  it "returns correct values for private methods" do
+    petition.send(:shh).should == "secret"
+  end
 
   it "yields to implicit blocks" do
     petition.method_with_implicit_block {|v| v }.should == "implicit"
