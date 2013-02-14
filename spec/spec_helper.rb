@@ -1,4 +1,5 @@
 require "simplecov"
+SimpleCov.add_filter "spec"
 SimpleCov.start
 
 $:.unshift(File.expand_path("../../lib", __FILE__))

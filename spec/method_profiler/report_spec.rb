@@ -71,6 +71,10 @@ describe MethodProfiler::Report do
   end
 
   describe "#to_s" do
+    it "displays the name of the profiled object" do
+      @report.to_s.should include("MethodProfiler results for: Petition")
+    end
+
     it "outputs one line for each method that was called" do
       output = @report.to_s
 

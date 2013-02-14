@@ -24,9 +24,11 @@ module MethodProfiler
     # Initializes a new {Report}. Used to sort and display data collected by a {Profiler}.
     #
     # @param [Array] data Data collected by a {Profiler}.
+    # @param [String] name The name of the object that was profiled.
     #
-    def initialize(data)
+    def initialize(data, name)
       @data = data
+      @name = name
       @sort_by = :average
       @order = :descending
     end
@@ -75,7 +77,7 @@ module MethodProfiler
     #
     def to_s
       [
-        "MethodProfiler results for: #{@obj}",
+        "MethodProfiler results for: #{@name}",
         Hirb::Helpers::Table.render(
           to_a,
           headers: HEADERS.dup,

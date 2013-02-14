@@ -25,7 +25,7 @@ module MethodProfiler
     # @return [Report] A new report with all the data the profiler has collected.
     #
     def report
-      Report.new(final_data)
+      Report.new(final_data, @obj.name)
     end
 
     private
