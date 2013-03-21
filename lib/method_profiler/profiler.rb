@@ -32,48 +32,31 @@ module MethodProfiler
 
     def wrap_methods_with_profiling
       profiler = self
-      singleton_methods_to_wrap = @obj.methods(false)
-      instance_methods_to_wrap = @obj.instance_methods(false)
-      private_instance_methods_to_wrap = @obj.private_instance_methods(false)
 
-      @obj.singleton_class.module_eval do
-        singleton_methods_to_wrap.each do |method|
-          define_method("#{method}_with_profiling") do |*args, &block|
-            profiler.send(:profile, method, true) { send("#{method}_without_profiling", *args, &block) }
+      [
+        { object: @obj.singleton_class, methods: @obj.methods(false), private: false, singleton: true },
+        { object: @obj, methods: @obj.instance_methods(false), private: false },
+        { object: @obj, methods: @obj.private_instance_methods(false), private: true }
+      ].each do |group|
+        group[:object].module_eval do
+          group[:methods].each do |method|
+            define_method("#{method}_with_profiling") do |*args, &block|
+              profiler.send(:profile, method, singleton: group[:singleton]) do
+                send("#{method}_without_profiling", *args, &block)
+              end
+            end
+
+            alias_method "#{method}_without_profiling", method
+            alias_method method, "#{method}_with_profiling"
+
+            private "#{method}_with_profiling" if group[:private]
           end
-
-          alias_method "#{method}_without_profiling", method
-          alias_method method, "#{method}_with_profiling"
-        end
-      end
-
-      @obj.module_eval do
-        instance_methods_to_wrap.each do |method|
-          define_method("#{method}_with_profiling") do |*args, &block|
-            profiler.send(:profile, method) { send("#{method}_without_profiling", *args, &block) }
-          end
-
-          alias_method "#{method}_without_profiling", method
-          alias_method method, "#{method}_with_profiling"
-        end
-      end
-
-      @obj.module_eval do
-        private_instance_methods_to_wrap.each do |method|
-          define_method("#{method}_with_profiling") do |*args, &block|
-            profiler.send(:profile, method) { send("#{method}_without_profiling", *args, &block) }
-          end
-
-          alias_method "#{method}_without_profiling", method
-          alias_method method, "#{method}_with_profiling"
-
-          private "#{method}_with_profiling"
         end
       end
     end
 
-    def profile(method, singleton = false, &block)
-      method_name = singleton ? ".#{method}" : "##{method}"
+    def profile(method, options = {}, &block)
+      method_name = options[:singleton] ? ".#{method}" : "##{method}"
       elapsed_time, result = benchmark(block)
       elapsed_time = elapsed_time.to_s.match(/\(\s*([^\)]+)\)/)[1].to_f
       @data[method_name] << elapsed_time
