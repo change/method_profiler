@@ -72,7 +72,7 @@ puts profiler.report.sort_by(:total_calls).order(:ascending)
 
 ## Documentation
 
-The public API is fully documented using [YARD](http://yardoc.org/) and can be viewed on [RubyDoc.info](http://rubydoc.info/).
+The public API is fully documented using [YARD](http://yardoc.org/) and can be viewed on [RubyDoc.info](http://rubydoc.info/github/change/method_profiler/frames).
 
 ## Tests
 
