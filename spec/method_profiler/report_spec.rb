@@ -7,7 +7,7 @@ describe MethodProfiler::Report do
     # Fake the timings for testing purposes
     profiler.stub(:benchmark) do |block_to_benchmark|
       result = block_to_benchmark.call
-      "(#{rand})"
+      rand
     end
 
     petition = Petition.new
