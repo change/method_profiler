@@ -5,3 +5,5 @@ pkg/*
 coverage/*
 .yardoc/*
 doc/*
+
+*.pem
